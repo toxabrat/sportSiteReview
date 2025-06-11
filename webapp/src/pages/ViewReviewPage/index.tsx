@@ -1,0 +1,44 @@
+import { useParams } from 'react-router-dom'
+import { trpc } from '../../lib/trpc'
+import css from './index.module.scss'
+
+export const ViewReviewPage = () => {
+  const { reviewNick } = useParams() as { reviewNick: string }
+
+  const result = trpc.getReview.useQuery({
+    reviewNick,
+  })
+  if (result.isLoading) {
+    return <span>Loading...</span>
+  }
+
+  if (result.isError) {
+    return <span>Erorr, {result.error.message}</span>
+  }
+
+  if (!result.data?.review) {
+    return <span>Review not found</span>
+  }
+  return (
+    <div>
+      <h1 className={css.title}>{result.data.review.name}</h1>
+      <p className={css.description}>{result.data.review.description}</p>
+      <div className={css.text} dangerouslySetInnerHTML={{ __html: result.data.review.text }} />
+    </div>
+  )
+}
+
+// export const ViewReviewPage = () => {
+//   const { reviewNick } = useParams() as { reviewNick: string }
+//   return (
+//     <div>
+//       <h1>{reviewNick}</h1>
+//       <p>Description review 1...</p>
+//       <div>
+//         <p>1 match</p>
+//         <p>2 match</p>
+//         <p>3 match</p>
+//       </div>
+//     </div>
+//   )
+// }
