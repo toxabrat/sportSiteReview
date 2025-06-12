@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { getViewReviewRoute } from '../../lib/routes'
 import { trpc } from '../../lib/trpc'
 import css from './index.module.scss'
+import { Segment } from '../../components/Segment'
 
 export const AllReviewPage = () => {
   const result = trpc.getReviews.useQuery()
@@ -14,23 +15,24 @@ export const AllReviewPage = () => {
   }
 
   return (
-    <div>
-      <h1 className={css.title}>footbal review</h1>
+    <Segment title="footbal review">
       <div className={css.ideas}>
         {result.data?.articles.map((element) => {
           return (
             <div className={css.idea} key={element.name}>
-              <h3 className={css.ideaName}>
-                <Link className={css.ideaLink} to={getViewReviewRoute({ reviewNick: element.nick })}>
-                  {element.nick}
-                </Link>
-              </h3>
-              <h2 className={css.ideaName}>{element.name}</h2>
-              <p className={css.ideaDescription}>{element.description}</p>
+              <Segment
+                size={2}
+                title={
+                  <Link className={css.ideaLink} to={getViewReviewRoute({ reviewNick: element.nick })}>
+                    {element.description}
+                  </Link>
+                }
+                description={element.description}
+              />
             </div>
           )
         })}
       </div>
-    </div>
+    </Segment>
   )
 }

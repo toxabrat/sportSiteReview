@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { trpc } from '../../lib/trpc'
 import css from './index.module.scss'
+import { Segment } from '../../components/Segment'
 
 export const ViewReviewPage = () => {
   const { reviewNick } = useParams() as { reviewNick: string }
@@ -20,11 +21,9 @@ export const ViewReviewPage = () => {
     return <span>Review not found</span>
   }
   return (
-    <div>
-      <h1 className={css.title}>{result.data.review.name}</h1>
-      <p className={css.description}>{result.data.review.description}</p>
+    <Segment title={result.data.review.name} description={result.data.review.description}>
       <div className={css.text} dangerouslySetInnerHTML={{ __html: result.data.review.text }} />
-    </div>
+    </Segment>
   )
 }
 
